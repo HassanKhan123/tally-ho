@@ -93,6 +93,7 @@ export class ProviderBridgeServiceDatabase extends Dexie {
     origin: string,
     accountAddress: string
   ): Promise<PermissionRequest | undefined> {
+    console.log("CHECK=========", origin, accountAddress)
     return this.dAppPermissions.get({ origin, accountAddress })
   }
 }

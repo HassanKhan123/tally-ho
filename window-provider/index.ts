@@ -40,6 +40,7 @@ export default class TallyWindowProvider extends EventEmitter {
 
   constructor(public transport: ProviderTransport) {
     super()
+    console.log("TALLY WINDOW PROVIDER=======================")
 
     const internalListener = (event: unknown) => {
       let result: TallyConfigPayload | TallyAccountPayload
@@ -154,8 +155,10 @@ export default class TallyWindowProvider extends EventEmitter {
     return new Promise((resolve, reject) => {
       // TODO: refactor the listener function out of the Promise
       const listener = (event: unknown) => {
+        console.log("EVENT listener============", event)
         let id
         let result: unknown
+        console.log("RESULT INIT-=================", result)
 
         if (isWindowResponseEvent(event)) {
           if (
@@ -165,9 +168,11 @@ export default class TallyWindowProvider extends EventEmitter {
           ) {
             return
           }
-
+          console.log("EVENT DATA================", event.data)
           ;({ id, result } = event.data)
+          console.log("RESULT isWindowResponseEvent=============", result)
         } else if (isPortResponseEvent(event)) {
+          console.log("RESULT isPortResponseEvent=============", result)
           ;({ id, result } = event)
         } else {
           return
@@ -184,22 +189,32 @@ export default class TallyWindowProvider extends EventEmitter {
 
         // TODO: refactor these into their own function handler
         // https://github.com/tallycash/tally-extension/pull/440#discussion_r753504700
+        console.log("RES==========================", result)
 
         if (isEIP1193Error(result)) {
+          console.log("ERRRRRRRRRRRRRRRRRRRRRRRR", result)
           reject(result)
         }
 
         // let's emmit connected on the first successful response from background
+        console.log(
+          "CONNECTED-----------------------",
+          this.isConnected,
+          result,
+          this.chainId
+        )
         if (!this.isConnected) {
           this.isConnected = true
           this.emit("connect", { chainId: this.chainId })
         }
 
         if (sentMethod === "eth_chainId" || sentMethod === "net_version") {
+          console.log("SENT METHOD=============", sentMethod, result)
           if (
             typeof result === "string" &&
             Number(this.chainId) !== Number(result)
           ) {
+            console.log("SENT METHOD 1=============")
             this.chainId = `0x${Number(result).toString(16)}`
             this.emit("chainChanged", this.chainId)
             this.emit("networkChanged", Number(this.chainId).toString())
@@ -212,6 +227,7 @@ export default class TallyWindowProvider extends EventEmitter {
           Array.isArray(result) &&
           result.length !== 0
         ) {
+          console.log("SENT METHOD 2=============")
           this.handleAddressChange.bind(this)(result)
         }
 
@@ -227,10 +243,12 @@ export default class TallyWindowProvider extends EventEmitter {
   }
 
   handleAddressChange(address: Array<string>): void {
+    console.log("ADD===========", this.selectedAddress, address)
     if (this.selectedAddress !== address[0]) {
       // eslint-disable-next-line prefer-destructuring
       this.selectedAddress = address[0]
-      this.emit("accountsChanged", address)
+      // this.emit("accountsChanged", address)
     }
   }
 }
+// river venue poet hybrid jeans arrange tower flush venue upper boy enlist infant next dune edit dial flag cherry very car come spot length

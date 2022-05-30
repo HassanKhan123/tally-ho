@@ -109,9 +109,6 @@ export default class ProviderBridgeService extends BaseService<Events> {
       typeof tab !== "undefined" && typeof tab.id !== "undefined"
         ? {
             ...tab,
-            // Firefox sometimes requires an extra query to get favicons,
-            // unclear why but may be related to
-            // https://bugzilla.mozilla.org/show_bug.cgi?id=1417721 .
             ...(await browser.tabs.get(tab.id)),
           }
         : tab

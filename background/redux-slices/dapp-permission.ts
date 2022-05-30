@@ -25,6 +25,7 @@ export const emitter = new Emittery<Events>()
 export const grantPermission = createBackgroundAsyncThunk(
   "dapp-permission/permissionGrant",
   async (permission: PermissionRequest) => {
+    console.log("GRANT===============", permission)
     await emitter.emit("grantPermission", permission)
     return permission
   }
@@ -44,7 +45,7 @@ const dappPermissionSlice = createSlice({
   initialState,
   reducers: {
     initializeAllowedPages: (
-      state,
+      state: any,
       { payload: allowedPages }: { payload: Record<string, PermissionRequest> }
     ) => {
       return {
@@ -53,7 +54,7 @@ const dappPermissionSlice = createSlice({
       }
     },
     requestPermission: (
-      state,
+      state: any,
       { payload: request }: { payload: PermissionRequest }
     ) => {
       if (state.permissionRequests[request.key]?.state !== "allow") {
@@ -76,6 +77,11 @@ const dappPermissionSlice = createSlice({
       .addCase(
         grantPermission.fulfilled,
         (state, { payload: permission }: { payload: PermissionRequest }) => {
+          console.log(
+            "GRANYT PERMISSION REDICE===============",
+            state,
+            permission
+          )
           const updatedPermissionRequests = { ...state.permissionRequests }
           delete updatedPermissionRequests[permission.key]
 
@@ -111,3 +117,4 @@ export const { requestPermission, initializeAllowedPages } =
   dappPermissionSlice.actions
 
 export default dappPermissionSlice.reducer
+// pulp economy come fruit roof relief soda domain drive observe fatigue despair flip damp gain govern crucial glory prosper critic opera repair matter group

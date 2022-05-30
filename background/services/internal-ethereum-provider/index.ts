@@ -87,11 +87,15 @@ export default class InternalEthereumProviderService extends BaseService<Events>
           ),
         }
         logger.log("internal response:", response)
+        console.log(
+          "INTERNAL ETHEREUM CALLLED---------------------------",
+          response
+        )
 
         internalProviderPort.postResponse(response)
       } catch (error) {
         logger.log("error processing request", event.id, error)
-
+        console.log("USER REJECTED===========INTERNAL ETHEREUM")
         internalProviderPort.postResponse({
           id: event.id,
           result: new EIP1193Error(

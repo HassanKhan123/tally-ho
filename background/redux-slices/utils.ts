@@ -117,6 +117,8 @@ export function createBackgroundAsyncThunk<
   Pick<AsyncThunk<Returned, ThunkArg, ThunkApiConfig>, AsyncThunkProps> {
   // Exit early if this type prefix is already aliased for handling in the
   // background script.
+
+  console.log("createBackgroundAsyncThunk RAN=================", typePrefix)
   if (allAliases[typePrefix]) {
     throw new Error("Attempted to register an alias twice.")
   }
